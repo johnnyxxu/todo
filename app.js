@@ -1,4 +1,5 @@
 
+// module dependencies
 const express = require('express');
 const http = require('http');
 const path = require('path');
@@ -17,6 +18,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+// set up all environments
 app.locals.appname = 'Todo List';
 app.set('port', process.env.PORT || 3000);
 // template files
@@ -47,6 +49,7 @@ app.use(function(re, res, next) {
 });
 app.use(app.router);
 
+// development only 
 if('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
@@ -80,3 +83,8 @@ app.get('/tasks/completed', tasks.completed);
 app.all('*', function(req, res) {
   res.send(404);
 });
+
+http.createServer(app).listen(app.get('port'),
+  function(){
+    console.log('Express is listening on ' + app.get('port'));
+  });
