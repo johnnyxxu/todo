@@ -20,10 +20,12 @@ exports.add = function(req, res, next) {
     return next(new Error('No data provided'));
   }
 
+  console.log('************');
+
   req.db.tasks.save({
     name: req.body.name,
     completed: false
-  }, function(error, tasks) {
+  }, function(error, task) {
     if (error) {
       return next(error);
     }
@@ -38,7 +40,7 @@ exports.add = function(req, res, next) {
 };
 
 // make all the tasks as completed
-export.markAllCompleted = function(req, res, next) {
+exports.markAllCompleted = function(req, res, next) {
   if (!req.body.all_done || req.body.all_done !== 'true') {
     return next();
   }
@@ -52,7 +54,7 @@ export.markAllCompleted = function(req, res, next) {
     console.info('Marked %s tasks completed', count);
     res.redirect('/tasks');
   }
-  })
+  )
 };
 
 // get all the completed list
