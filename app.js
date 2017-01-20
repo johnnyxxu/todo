@@ -81,7 +81,7 @@ app.get('/', routes.index);
 app.get('/tasks', tasks.list);
 app.post('/tasks', tasks.markAllCompleted);
 app.post('/tasks', tasks.add);
-app.post('/tasks/:task_id', tasks.markAllCompleted);
+app.post('/tasks/:task_id', tasks.markCompleted);
 app.del('/tasks/:task_id', tasks.del);
 // completed page
 app.get('/tasks/completed', tasks.completed);

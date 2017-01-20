@@ -15,12 +15,11 @@ exports.list = function(req, res, next) {
   });
 };
 
+// add one to the database
 exports.add = function(req, res, next) {
   if (!req.body || !req.body.name) {
     return next(new Error('No data provided'));
   }
-
-  console.log('************');
 
   req.db.tasks.save({
     name: req.body.name,
@@ -41,6 +40,7 @@ exports.add = function(req, res, next) {
 
 // make all the tasks as completed
 exports.markAllCompleted = function(req, res, next) {
+  console.log('mark all completed ************');
   if (!req.body.all_done || req.body.all_done !== 'true') {
     return next();
   }
@@ -70,22 +70,14 @@ exports.completed = function(req, res, next) {
 };
 
 // mark a task as completed
-exports.markCompleted = function (req, res, next) {
-  if (!req.body.completed)
-    return next(new Error('Param is missing'));
-
-  req.db.tasks.updateById(req.task._id, {
-    $set: {completed: req.body.completed === 'true'}},
-    function(error, count) {
-      if (error) return next(error);
-      if (count !== 1)
-        return next(new Error('the count is not 1'));
-      console.info('Marked task %s with id=%s completed',
-                  req.task.name,
-                  req.task._id);
-      res.redirect('/tasks');
-    }
-  )
+exports.markCompleted = function(req, res, next) {
+  if (!req.body.completed) return next(new Error('Param is missing'));
+  req.db.tasks.updateById(req.task._id, {$set: {completed: req.body.completed === 'true'}}, function(error, count) {
+    if (error) return next(error);
+    if (count.n !==1) return next(new Error('Something went wrong.'));
+    console.info('Marked task %s with id=%s completed.', req.task.name, req.task._id);
+    res.redirect('/tasks');
+  })
 };
 
 // delete task
